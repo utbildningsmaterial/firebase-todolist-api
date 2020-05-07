@@ -10,6 +10,12 @@
     measurementId: "G-3BHEM5DSRB"
 };
 
+let LISTCODE = 'defaultlist';
+
+if(!!localStorage.getItem('listcode')) {
+    LISTCODE = localStorage.getItem('listcode')
+}
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
@@ -28,7 +34,7 @@ document.querySelector('button').addEventListener('click', () => {
     };
 
     // Slänga upp den i firestore
-    db.collection('lists').doc('xch').collection('todos').doc().set(todo)
+    db.collection('lists').doc(LISTCODE).collection('todos').doc().set(todo)
     .then(resp => console.log('DB updated!'))
     .catch(err => console.error(err))
 
@@ -38,7 +44,7 @@ document.querySelector('button').addEventListener('click', () => {
 
 
 // hämta data vid collection update
-db.collection('lists').doc('xch').collection('todos').onSnapshot((snapshot) => {
+db.collection('lists').doc(LISTCODE).collection('todos').onSnapshot((snapshot) => {
 
     // empty ul
     document.querySelector('#todos').innerHTML = '';
@@ -79,10 +85,12 @@ function handleClick(e) {
 
     let docId = e.target.getAttribute('data-id');
 
+    let todoRef = db.collection('lists').doc(LISTCODE).collection('todos');
+
     if(e.altKey) {
     
         // remove todo
-        db.collection('todos').doc(docId).delete();
+        todoRef.doc(docId).delete();
 
     } else {
 
@@ -90,13 +98,13 @@ function handleClick(e) {
         if(e.target.classList.contains('done')) { 
         
             // Set to false
-            db.collection('todos').doc(docId).update({ done: false })
+            todoRef.doc(docId).update({ done: false })
             .catch(err => console.error(err))
         
         } else {
 
             // set to true
-            db.collection('todos').doc(docId).update({ done: true })
+            todoRef.doc(docId).update({ done: true })
             .catch(err => console.error(err))
         }
     }
@@ -117,6 +125,7 @@ document.querySelector('#login').addEventListener('click', () => {
 
 
 
+// Logout
 document.querySelector('#logout').addEventListener('click', () => {
 
     firebase
@@ -125,6 +134,23 @@ document.querySelector('#logout').addEventListener('click', () => {
     .catch(err => console.error(err))
 
 })
+
+
+// Save LIST ID in localstorage
+document.querySelector('#save-list').addEventListener('click', () => {
+
+    // kika i input, hämta kod
+    let code = document.querySelector('#list-id').value;
+
+    // Spara kod i localStorage
+    localStorage.setItem('listcode', code);
+
+    location.reload();
+
+})
+
+
+
 
 
 firebase.auth().onAuthStateChanged((user) => {
