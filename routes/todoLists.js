@@ -11,7 +11,10 @@ router.post('/', async (req, res) => {
     let id = generateId(3);
 
     // Skapa ett dokument i lists collection med det genererade IDt.
-    await db.collection('lists').doc(id).set({
+    await db
+    .collection('lists')
+    .doc(id)
+    .set({
         name: req.body.listName
     })
 
@@ -26,7 +29,11 @@ router.get('/:id', async (req, res) => {
     let docs = [];
 
     // anropa fb, hämta doc med :id
-    let snapShot = await db.collection('lists').doc(req.params.id).collection('todos').get();
+    let snapShot = await db
+    .collection('lists')
+    .doc(req.params.id)
+    .collection('todos')
+    .get();
     
     snapShot.forEach(doc => {
         docs.push(doc.data())
@@ -39,17 +46,27 @@ router.get('/:id', async (req, res) => {
 router.post('/:id/todos', async (req, res) => {
 
     // leta reda på list Obj med :id
-    await db.collection('lists').doc(req.params.id).collection('todos').doc().set(req.body)
+    await db
+    .collection('lists')
+    .doc(req.params.id)
+    .collection('todos')
+    .doc()
+    .set(req.body)
 
     // tell client OK
     res.send({ msg: 'New Todo added.'})
 
 })
 
-router.put('/:id/todos/:todoid', (req, res) => {
+router.put('/:id/todos/:todoid', async (req, res) => {
 
     // updatera en TODO :todoid till true / false
-    db.collection('lists').doc(req.params.id).collection('todos').doc(req.params.todoid).update(req.body)
+    await db
+    .collection('lists')
+    .doc(req.params.id)
+    .collection('todos')
+    .doc(req.params.todoid)
+    .update(req.body)
 
     res.send({ msg: 'Todo updated.' })
 
