@@ -21,6 +21,41 @@ router.post('/', async (req, res) => {
 })
 
 // GET = Hämta en lista med spec ID
+router.get('/:id', async (req, res) => {
+
+    let docs = [];
+
+    // anropa fb, hämta doc med :id
+    let snapShot = await db.collection('lists').doc(req.params.id).collection('todos').get();
+    
+    snapShot.forEach(doc => {
+        docs.push(doc.data())
+    })
+
+    res.send({ todos: docs })
+
+})
+
+router.post('/:id/todos', async (req, res) => {
+
+    // leta reda på list Obj med :id
+    await db.collection('lists').doc(req.params.id).collection('todos').doc().set(req.body)
+
+    // tell client OK
+    res.send({ msg: 'New Todo added.'})
+
+})
+
+router.put('/:id/todos/:todoid', (req, res) => {
+
+    // updatera en TODO :todoid till true / false
+    db.collection('lists').doc(req.params.id).collection('todos').doc(req.params.todoid).update(req.body)
+
+    res.send({ msg: 'Todo updated.' })
+
+})
+
+
 
 // PUT = Uppdatera en lista
 
