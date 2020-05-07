@@ -28,15 +28,17 @@ document.querySelector('button').addEventListener('click', () => {
     };
 
     // Slänga upp den i firestore
-    db.collection('todos').doc().set(todo)
+    db.collection('lists').doc('xch').collection('todos').doc().set(todo)
     .then(resp => console.log('DB updated!'))
     .catch(err => console.error(err))
 
 })
 
 
+
+
 // hämta data vid collection update
-db.collection('todos').onSnapshot((snapshot) => {
+db.collection('lists').doc('xch').collection('todos').onSnapshot((snapshot) => {
 
     // empty ul
     document.querySelector('#todos').innerHTML = '';
