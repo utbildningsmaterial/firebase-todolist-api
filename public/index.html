@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Awesome Firebase Todo App</title>
+</head>
+<style>
+
+.done {
+    color: red;
+}
+
+</style>
+<body>
+
+    <h1>Super Awesome Firebase Todo App</h1>
+    <header>
+        <input type="text" id="todo">
+        <button>Add Todo</button>
+    </header>
+    <ul id="todos">
+
+    </ul>
+    <footer>
+        <p>Not Logged in</p>
+        <input type="email" id="email" placeholder="email">
+        <input type="password" id="password" placeholder="password">
+        <button id="login">Let me in please!</button>
+
+        <button id="logout">Logout</button>
+    </footer>
+    
+    <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-auth.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
